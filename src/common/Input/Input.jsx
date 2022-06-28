@@ -2,9 +2,8 @@ import React from 'react';
 function Input(props) {
 	return (
 		<>
-			<label htmlFor='courseSearch'> </label>
 			<input
-				name='courseSearch'
+				name={props.name}
 				type={props.type}
 				placeholder={props.placeholder}
 				className='border border-warning w-50'

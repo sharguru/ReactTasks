@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import AuthorItem from './components/AuthorItem/AuthorItem';
 import { addtoAuthors, addToCourse, mockedAuthorsList } from '../../constants';
 import { getCourseDuration } from '../../helpers/getCourseDuration';
@@ -7,10 +7,7 @@ import TitleDescription from './components/TitleDescription/TitleDescription';
 import { v4 as uuidv4 } from 'uuid';
 import { CourseToggle } from '../../App';
 import Button from '../../common/Button/Button';
-
-// using useContext hook
-export const AuthorContext = createContext();
-export const CourseContext = createContext();
+import Input from '../../common/Input/Input';
 
 function CreateCourse() {
 	// state variables
@@ -58,23 +55,23 @@ function CreateCourse() {
 		setDurationInHrs(getCourseDuration(event.target.value));
 	};
 
-	const selectAuthor = (id) => {
-		let newAuthors = availableAuthors.filter((item) => item.id === id);
+	const selectAuthor = (e) => {
+		let newAuthors = availableAuthors.filter((item) => item.id === e.target.id);
 		setSelectedAuthor((preval) => {
 			return [...preval, ...newAuthors];
 		});
 		setAvailableAuthors((preval) => {
-			return preval.filter((item) => item.id !== id);
+			return preval.filter((item) => item.id !== e.target.id);
 		});
 	};
 
-	const deselectAuthors = (id) => {
-		let newAuthors = selectedAuthor.filter((item) => item.id === id);
+	const deselectAuthors = (e) => {
+		let newAuthors = selectedAuthor.filter((item) => item.id === e.target.id);
 		setAvailableAuthors((preval) => {
 			return [...preval, ...newAuthors];
 		});
 		setSelectedAuthor((preval) => {
-			return preval.filter((item) => item.id !== id);
+			return preval.filter((item) => item.id !== e.target.id);
 		});
 	};
 
@@ -96,31 +93,35 @@ function CreateCourse() {
 	const addNewAuthor = () => {
 		if (authorDetail.name !== '') {
 			addtoAuthors(authorDetail);
-			setAvailableAuthors(mockedAuthorsList);
+			setAvailableAuthors(
+				mockedAuthorsList.filter((item) => !selectedAuthor.includes(item))
+			);
 			setAuthorDetail({ name: '' });
 		}
 	};
 
 	return (
 		<div className='m-3 border border-warning p-3'>
-			<CourseContext.Provider
-				value={{ courseDetails, setCourseDetails, createCourseClick }}
-			>
-				<TitleDescription />
-			</CourseContext.Provider>
+			<TitleDescription
+				courseDetails={courseDetails}
+				setCourseDetails={setCourseDetails}
+				createCourseClick={createCourseClick}
+			/>
 			<div className='authorlist d-flex justify-content-between border border-danger p-3'>
 				<div className='newAuthor w-50 d-flex flex-column justify-content-between'>
 					<span className='mb-5'>
 						<h4 className='mx-auto' style={{ width: 'fit-content' }}>
 							Add author
 						</h4>
-						<label htmlFor='createAuthor'>Author Name</label>
-						<input
+						<label className='d-flex' htmlFor='createAuthor'>
+							Author Name
+						</label>
+						<Input
 							type='text'
 							placeholder='Enter author name...'
 							className='d-block mb-3 w-100'
 							value={authorDetail.name}
-							onChange={(e) =>
+							change={(e) =>
 								setAuthorDetail({ name: e.target.value, id: uuidv4() })
 							}
 						/>
@@ -136,50 +137,50 @@ function CreateCourse() {
 						durationInHrs={durationInHrs}
 					/>
 				</div>
-				<AuthorContext.Provider value={{ selectAuthor, deselectAuthors }}>
-					<div className='d-flex flex-column w-50'>
-						<div className='chooseAuthor w-100 float-end'>
-							<h4 className='mx-auto' style={{ width: 'fit-content' }}>
-								Authors
-							</h4>
-							{availableAuthors.map((author) => {
+				<div className='d-flex flex-column w-50'>
+					<div className='chooseAuthor w-100 float-end'>
+						<h4 className='mx-auto' style={{ width: 'fit-content' }}>
+							Authors
+						</h4>
+						{availableAuthors.map((author) => {
+							return (
+								<AuthorItem
+									authorName={author.name}
+									key={author.id}
+									id={author.id}
+									buttonText='Add Author'
+									buttonFunction={selectAuthor}
+								/>
+							);
+						})}
+					</div>
+					<div className='slectedAuthor'>
+						<h4 className='mx-auto' style={{ width: 'fit-content' }}>
+							Choose Authors
+						</h4>
+						{selectedAuthor.length === 0 && (
+							<p
+								className='mx-auto text-danger'
+								style={{ width: 'fit-content' }}
+							>
+								Author list is empty
+							</p>
+						)}
+
+						{selectedAuthor.length !== 0 &&
+							selectedAuthor.map((author) => {
 								return (
 									<AuthorItem
 										authorName={author.name}
 										key={author.id}
 										id={author.id}
-										buttonText='Add Author'
+										buttonText='Delete Author'
+										buttonFunction={deselectAuthors}
 									/>
 								);
 							})}
-						</div>
-						<div className='slectedAuthor'>
-							<h4 className='mx-auto' style={{ width: 'fit-content' }}>
-								Choose Authors
-							</h4>
-							{selectedAuthor.length === 0 && (
-								<p
-									className='mx-auto text-danger'
-									style={{ width: 'fit-content' }}
-								>
-									Author list is empty
-								</p>
-							)}
-
-							{selectedAuthor.length !== 0 &&
-								selectedAuthor.map((author) => {
-									return (
-										<AuthorItem
-											authorName={author.name}
-											key={author.id}
-											id={author.id}
-											buttonText='Delete Author'
-										/>
-									);
-								})}
-						</div>
 					</div>
-				</AuthorContext.Provider>
+				</div>
 			</div>
 		</div>
 	);

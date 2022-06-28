@@ -1,32 +1,37 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Button from '../../../../common/Button/Button';
-import { CourseContext } from '../../CreateCourse';
-function TitleDescription() {
-	const { courseDetails, setCourseDetails, createCourseClick } =
-		useContext(CourseContext);
+import Input from '../../../../common/Input/Input';
+function TitleDescription({
+	courseDetails,
+	setCourseDetails,
+	createCourseClick,
+}) {
 	return (
 		<>
 			<div className='title d-flex justify-content-between mt-3 mb-3'>
 				<span className='d-flex flex-column w-50'>
-					<label htmlFor='courseTitle'>Title</label>
-					<input
+					<label className='d-flex' htmlFor='title'>
+						Title
+					</label>
+					<Input
 						type='text'
-						className='border border-success w-75'
+						name='title'
+						value={courseDetails.title}
 						placeholder='Enter Title...'
-						onChange={(e) => {
+						change={(e) => {
 							setCourseDetails({
 								...courseDetails,
 								[e.target.name]: e.target.value,
 							});
 						}}
-						value={courseDetails.title}
-						name='title'
 					/>
 				</span>
 				<Button buttonText='Create Course' click={createCourseClick} />
 			</div>
 			<span className='d-flex flex-column w-100 mb-3'>
-				<label htmlFor='courseDescription'>Description</label>
+				<label className='d-flex' htmlFor='courseDescription'>
+					Description
+				</label>
 				<textarea
 					cols='25'
 					rows='4'
