@@ -1,8 +1,8 @@
 import React from 'react';
 import Button from '../../../../common/Button/Button';
 import Input from '../../../../common/Input/Input';
-function SearchBar(props) {
-	// const [searchInput, setSearchInput] = useState('');
+import { buttonTextConstant } from '../../../../constants';
+const SearchBar = (props) => {
 	const handleChange = (event) => {
 		event.preventDefault();
 		props.setFunction(event.target.value);
@@ -17,10 +17,15 @@ function SearchBar(props) {
 				placeholder='Enter Course name or id ...'
 				change={handleChange}
 				value={props.searchTerm}
+				className='w-50'
 			/>
-			<Button buttonText='Search' click={handleSubmit} />
+			<Button
+				buttonText={buttonTextConstant.SEARCH}
+				click={handleSubmit}
+				className='m-3'
+			/>
 		</div>
 	);
-}
+};
 
 export default SearchBar;

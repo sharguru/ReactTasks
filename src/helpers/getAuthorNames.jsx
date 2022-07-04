@@ -1,18 +1,10 @@
-import { mockedAuthorsList } from '../constants';
+import { getFullAuthors } from './getFullAuthors';
 export const getAuthors = (authArr) => {
-	let authorstr = '';
-	authArr.forEach((element) => {
-		mockedAuthorsList.forEach((e) => {
-			if (e.id === element) {
-				authorstr = authorstr + e.name + ',';
-			}
-		});
-	});
-	let res = '';
-	if (authorstr.length > 25) {
-		res = authorstr.substring(0, 23) + '...';
+	let res = getFullAuthors(authArr);
+	if (res.length > 25) {
+		res = res.substring(0, 23) + '...';
 	} else {
-		res = authorstr.substring(0, authorstr.length - 1);
+		res = res.substring(0, res.length - 1);
 	}
 	return res;
 };
