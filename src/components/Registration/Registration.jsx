@@ -29,10 +29,10 @@ const Registration = () => {
 					alert('User Created');
 					navigate('/login');
 				} else {
-					alert('Some error occured');
+					alert('User Registration failed');
 				}
 			})
-			.catch((e) => console.log(e));
+			.catch((e) => <p>Sorry, Registration failed</p>);
 	};
 
 	return (

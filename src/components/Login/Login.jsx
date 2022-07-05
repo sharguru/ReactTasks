@@ -28,7 +28,9 @@ const Login = () => {
 					}
 				}
 			})
-			.catch((e) => console.log(e));
+			.catch((e) => {
+				return <p>Sorry, Login Failed</p>;
+			});
 	};
 	return (
 		<div

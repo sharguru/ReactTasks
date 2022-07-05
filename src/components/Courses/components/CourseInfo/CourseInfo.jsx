@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Button from '../../../../common/Button/Button';
 import { buttonTextConstant, mockedCoursesList } from '../../../../constants';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { getFullAuthors } from '../../../../helpers/getFullAuthors';
-import { getAuthors } from '../../../../helpers/getAuthorNames';
 const CourseInfo = (props) => {
-	const navigate = useNavigate();
 	const { courseId } = useParams();
 	const [courseDetail, setCourseDetail] = useState({
 		authors: [],
