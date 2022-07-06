@@ -1,18 +1,19 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../common/Button/Button';
 import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
-import { CourseToggle } from '../../App';
-function Courses(props) {
+import { buttonTextConstant, mockedCoursesList } from '../../constants';
+const Courses = (props) => {
 	const [searchTerm, setSearchTerm] = useState('');
-	const [courseList, setCourseList] = useState(props.courseList);
-	useEffect(() => {
-		setCourseList(props.courseList);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [searchTerm]);
+	const [courseList, setCourseList] = useState(mockedCoursesList);
+	const token = localStorage.getItem('token');
+	const [tokenAvailable, setTokenAvailable] = useState(false);
 
-	const { toggleShowCourse } = useContext(CourseToggle);
-
+	const navigate = useNavigate();
+	const createCourseButtonClick = () => {
+		navigate('/courses/add');
+	};
 	const handleSearch = () => {
 		if (searchTerm.length !== 0) {
 			setCourseList((preVal) => {
@@ -24,22 +25,38 @@ function Courses(props) {
 			});
 		}
 	};
+	useEffect(() => {
+		if (token === 'null') {
+			setTokenAvailable(false);
+			alert('Please login to access the course');
+			navigate('/login');
+		} else if (token !== null) {
+			setTokenAvailable(true);
+		}
+	}, [token, navigate]);
 	return (
-		<div className='p-3 border border-success m-3'>
-			<span className='d-flex w-100 justify-content-between'>
-				<SearchBar
-					searchTerm={searchTerm}
-					setFunction={setSearchTerm}
-					submit={handleSearch}
-				/>
-				<Button buttonText='Add New Course' click={toggleShowCourse} />
-			</span>
-			{courseList !== [] &&
-				courseList.map((item, index) => (
-					<CourseCard course={item} key={index} />
-				))}
-		</div>
+		<>
+			{tokenAvailable && (
+				<div className='p-3 border border-success m-3'>
+					<span className='d-flex w-100 justify-content-between'>
+						<SearchBar
+							searchTerm={searchTerm}
+							setFunction={setSearchTerm}
+							submit={handleSearch}
+						/>
+						<Button
+							buttonText={buttonTextConstant.ADD_NEW_COURSE}
+							click={createCourseButtonClick}
+						/>
+					</span>
+					{courseList !== [] &&
+						courseList.map((item, index) => (
+							<CourseCard course={item} key={index} />
+						))}
+				</div>
+			)}
+		</>
 	);
-}
+};
 
 export default Courses;

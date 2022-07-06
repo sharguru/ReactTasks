@@ -1,17 +1,22 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AuthorItem from './components/AuthorItem/AuthorItem';
-import { addtoAuthors, addToCourse, mockedAuthorsList } from '../../constants';
+import {
+	addtoAuthors,
+	addToCourse,
+	buttonTextConstant,
+	mockedAuthorsList,
+} from '../../constants';
 import { getCourseDuration } from '../../helpers/getCourseDuration';
 import Duration from './components/Duration/Duration';
 import TitleDescription from './components/TitleDescription/TitleDescription';
 import { v4 as uuidv4 } from 'uuid';
-import { CourseToggle } from '../../App';
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
 
-function CreateCourse() {
+const CreateCourse = () => {
 	// state variables
-	const [duration, setDuration] = useState('');
+
 	const [durationInHrs, setDurationInHrs] = useState(0);
 	const [availableAuthors, setAvailableAuthors] = useState(mockedAuthorsList);
 	const [selectedAuthor, setSelectedAuthor] = useState([]);
@@ -29,14 +34,12 @@ function CreateCourse() {
 	});
 
 	useEffect(() => {
-		// setAvailableAuthors(mockedAuthorsList);
 		let date = new Date();
 		let authId = [];
 		selectedAuthor.map((item) => authId.push(item.id));
 		setCourseDetails((preval) => {
 			return {
 				...preval,
-				duration: duration,
 				creationDate: `${date.getDate()}/${
 					date.getMonth() + 1
 				}/${date.getFullYear()}`,
@@ -44,16 +47,8 @@ function CreateCourse() {
 				id: uuidv4(),
 			};
 		});
-	}, [selectedAuthor, duration]);
-
-	// context variable
-	const { toggleShowCourse } = useContext(CourseToggle);
-
-	// functions
-	const durationChange = (event) => {
-		setDuration(event.target.value);
-		setDurationInHrs(getCourseDuration(event.target.value));
-	};
+	}, [selectedAuthor]);
+	const navigate = useNavigate();
 
 	const selectAuthor = (e) => {
 		let newAuthors = availableAuthors.filter((item) => item.id === e.target.id);
@@ -86,7 +81,7 @@ function CreateCourse() {
 			alert('Please! fil in all fields');
 		} else {
 			addToCourse(courseDetails);
-			toggleShowCourse();
+			navigate('/courses');
 		}
 	};
 
@@ -96,15 +91,26 @@ function CreateCourse() {
 			setAvailableAuthors(
 				mockedAuthorsList.filter((item) => !selectedAuthor.includes(item))
 			);
-			setAuthorDetail({ name: '' });
+			setAuthorDetail({ name: '', id: '' });
 		}
 	};
+	const handleCourseDetailsChange = (e) => {
+		setCourseDetails({
+			...courseDetails,
+			[e.target.name]: e.target.value,
+		});
+		if (e.target.name === 'duration') {
+			setDurationInHrs(getCourseDuration(e.target.value));
+		}
+	};
+	const handleAuthorDetailChange = (e) =>
+		setAuthorDetail({ name: e.target.value, id: uuidv4() });
 
 	return (
 		<div className='m-3 border border-warning p-3'>
 			<TitleDescription
 				courseDetails={courseDetails}
-				setCourseDetails={setCourseDetails}
+				handleCourseDetailsChange={handleCourseDetailsChange}
 				createCourseClick={createCourseClick}
 			/>
 			<div className='authorlist d-flex justify-content-between border border-danger p-3'>
@@ -121,19 +127,17 @@ function CreateCourse() {
 							placeholder='Enter author name...'
 							className='d-block mb-3 w-100'
 							value={authorDetail.name}
-							change={(e) =>
-								setAuthorDetail({ name: e.target.value, id: uuidv4() })
-							}
+							change={handleAuthorDetailChange}
 						/>
 						<Button
-							buttonText='Create Author'
+							buttonText={buttonTextConstant.CREATE_AUTHOR}
 							click={addNewAuthor}
 							className='mx-auto'
 						/>
 					</span>
 					<Duration
-						durationChange={durationChange}
-						duration={duration}
+						handleCourseDetailsChange={handleCourseDetailsChange}
+						courseDetails={courseDetails}
 						durationInHrs={durationInHrs}
 					/>
 				</div>
@@ -148,7 +152,7 @@ function CreateCourse() {
 									authorName={author.name}
 									key={author.id}
 									id={author.id}
-									buttonText='Add Author'
+									buttonText={buttonTextConstant.ADD_AUTHOR}
 									buttonFunction={selectAuthor}
 								/>
 							);
@@ -174,7 +178,7 @@ function CreateCourse() {
 										authorName={author.name}
 										key={author.id}
 										id={author.id}
-										buttonText='Delete Author'
+										buttonText={buttonTextConstant.DELETE_AUTHOR}
 										buttonFunction={deselectAuthors}
 									/>
 								);
@@ -184,6 +188,6 @@ function CreateCourse() {
 			</div>
 		</div>
 	);
-}
+};
 
 export default CreateCourse;

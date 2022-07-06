@@ -1,3 +1,16 @@
+export const buttonTextConstant = {
+	ADD_NEW_COURSE: 'Add New Course',
+	SHOW_COURSE: 'Show Courses',
+	SEARCH: 'Search',
+	LOGOUT: 'Logout',
+	CREATE_COURSE: 'Create Course',
+	CREATE_AUTHOR: 'Create Author',
+	ADD_AUTHOR: 'Add Author',
+	DELETE_AUTHOR: 'Delete Author',
+	REGISTRATION: 'Registration',
+	LOGIN: 'Login',
+	BACKBUTTON: '◀Back to Courses',
+};
 export const mockedCoursesList = [
 	{
 		id: 'de5aaa59-90f5-4dbc-b8a9-aaf205c551ba',
