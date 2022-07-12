@@ -20,22 +20,22 @@ const CourseInfo = (props) => {
 				<Link to='/courses' className='m-3 text-decoration-none'>
 					{buttonTextConstant.BACKBUTTON}
 				</Link>
-				<h1 className='text-center mb-5'>{courseDetail.title}</h1>
+				<h1 className='text-center mb-5'>{courseDetail?.title}</h1>
 				<div className='courseDetails d-flex flex-row '>
 					<div className='w-75 p-3 pe-5 text-wrap'>
-						{courseDetail.description}
+						{courseDetail?.description}
 					</div>
 					<div className='p-3 w-25'>
 						<h6>
-							ID : <span className='fw-lighter'>{courseDetail.id}</span>
+							ID : <span className='fw-lighter'>{courseDetail?.id}</span>
 						</h6>
 						<h6>
 							Duration :
-							<span className='fw-lighter'>{courseDetail.duration}</span>
+							<span className='fw-lighter'>{courseDetail?.duration}</span>
 						</h6>
 						<h6>
 							Created :
-							<span className='fw-lighter'>{courseDetail.creationDate}</span>
+							<span className='fw-lighter'>{courseDetail?.creationDate}</span>
 						</h6>
 						<h6>
 							Authors :

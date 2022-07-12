@@ -3,37 +3,43 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../common/Button/Button';
 import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
-import { buttonTextConstant, mockedCoursesList } from '../../constants';
+import { buttonTextConstant } from '../../constants';
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteCourse } from '../../store/courses/actions';
 const Courses = (props) => {
 	const [searchTerm, setSearchTerm] = useState('');
-	const [courseList, setCourseList] = useState(mockedCoursesList);
-	const token = localStorage.getItem('token');
-	const [tokenAvailable, setTokenAvailable] = useState(false);
-
+	const courseArr = useSelector((state) => state.course);
+	const [courseList, setCourseList] = useState(courseArr);
+	const dispatch = useDispatch();
+	const tokenAvailable = useSelector((state) => state.user.isAuth);
 	const navigate = useNavigate();
 	const createCourseButtonClick = () => {
 		navigate('/courses/add');
 	};
 	const handleSearch = () => {
 		if (searchTerm.length !== 0) {
-			setCourseList((preVal) => {
-				let newArr = preVal.filter(
+			setCourseList((preval) => {
+				let newArr = preval.filter(
 					(item) =>
 						item.id.includes(searchTerm) || item.title.includes(searchTerm)
 				);
 				return newArr;
 			});
+		} else if (searchTerm.length === 0) {
+			setCourseList(courseArr);
 		}
 	};
+	const handleCourseDeleteClick = (id) => {
+		dispatch(deleteCourse(id));
+	};
 	useEffect(() => {
-		if (token === 'null') {
-			setTokenAvailable(false);
+		setCourseList(courseArr);
+
+		if (!tokenAvailable) {
 			alert('Please login to access the course');
 			navigate('/login');
-		} else if (token !== null) {
-			setTokenAvailable(true);
 		}
-	}, [token, navigate]);
+	}, [navigate, tokenAvailable, courseArr]);
 	return (
 		<>
 			{tokenAvailable && (
@@ -51,7 +57,11 @@ const Courses = (props) => {
 					</span>
 					{courseList !== [] &&
 						courseList.map((item, index) => (
-							<CourseCard course={item} key={index} />
+							<CourseCard
+								course={item}
+								key={index}
+								handleCourseDeleteClick={handleCourseDeleteClick}
+							/>
 						))}
 				</div>
 			)}

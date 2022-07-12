@@ -4,9 +4,11 @@ import Input from '../../common/Input/Input';
 import { buttonTextConstant } from '../../constants';
 import { Link, useNavigate } from 'react-router-dom';
 import { Axios } from '../../axios';
+import { useDispatch } from 'react-redux';
+import { addUserInfo } from '../../store/user/actions';
 const Login = () => {
 	const navigate = useNavigate();
-
+	const dispatch = useDispatch();
 	const [loginDetails, setLoginDetails] = useState({
 		email: '',
 		password: '',
@@ -16,16 +18,14 @@ const Login = () => {
 			return { ...preval, [e.target.name]: e.target.value };
 		});
 	};
-	const handleLoginSubmit = async (e) => {
+	const handleLoginSubmit = (e) => {
 		e.preventDefault();
-		await Axios.post('/login', loginDetails)
+		Axios.post('/login', loginDetails)
 			.then((res) => {
 				if (res.status === 201) {
+					dispatch(addUserInfo(res.data));
 					localStorage.setItem('token', res.data.result);
-					localStorage.setItem('user', res.data.user.name);
-					if (localStorage.getItem('token')) {
-						navigate('/courses');
-					}
+					navigate('/courses');
 				}
 			})
 			.catch((e) => {

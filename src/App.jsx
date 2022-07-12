@@ -1,4 +1,3 @@
-import './App.css';
 import React from 'react';
 import Courses from './components/Courses/Courses';
 import CreateCourse from './components/CreateCourse/CreateCourse';
@@ -8,10 +7,11 @@ import { Routes, Route } from 'react-router-dom';
 import Login from './components/Login/Login';
 import Registration from './components/Registration/Registration';
 import CourseInfo from './components/Courses/components/CourseInfo/CourseInfo';
+import './App.css';
 
 const App = () => {
-	localStorage.setItem('user', 'null');
-	localStorage.setItem('token', 'null');
+	// localStorage.setItem('user', 'null');
+	// localStorage.setItem('token', '');
 	return (
 		<>
 			<Header />
