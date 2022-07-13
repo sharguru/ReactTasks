@@ -1,13 +1,13 @@
-import { mockedCoursesList } from '../../constants';
 import {
 	ADD_COURSE,
 	DELETE_COURSE,
 	FILTER_COURSE,
 	GET_COURSE,
+	SET_INITIAL_COURSE,
 	UPDATE_COURSE,
 } from './types';
 
-const courseInitialState = mockedCoursesList;
+const courseInitialState = [];
 
 export const courseReducer = (state = courseInitialState, action) => {
 	switch (action.type) {
@@ -25,6 +25,8 @@ export const courseReducer = (state = courseInitialState, action) => {
 			);
 		case GET_COURSE:
 			return state;
+		case SET_INITIAL_COURSE:
+			return [...action.payload];
 		default:
 			return state;
 	}

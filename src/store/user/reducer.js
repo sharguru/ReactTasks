@@ -10,6 +10,7 @@ const userInitialState = {
 export const userReducer = (state = userInitialState, action) => {
 	switch (action.type) {
 		case ADD_USER:
+			console.log(action.payload);
 			return {
 				...state,
 				name: action.payload.user.name,

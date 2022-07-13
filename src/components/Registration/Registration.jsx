@@ -3,7 +3,7 @@ import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
 import { buttonTextConstant } from '../../constants';
 import { Link, useNavigate } from 'react-router-dom';
-import { Axios } from '../../axios';
+import { register } from '../../service';
 
 const Registration = () => {
 	const navigate = useNavigate();
@@ -22,12 +22,12 @@ const Registration = () => {
 	};
 	const sumbitRegistration = (e) => {
 		e.preventDefault();
-		Axios.post('/register', regDetails)
+		register(regDetails)
 			.then((res) => {
 				if (res.status === 201) {
 					setRegDetails({ name: '', email: '', password: '' });
 					alert('User Created');
-					navigate('/login');
+					navigate('/');
 				} else {
 					alert('User Registration failed');
 				}
@@ -76,7 +76,7 @@ const Registration = () => {
 						className='w-100 mb-4'
 					/>
 					<p className='text-center'>
-						If you have an account you can <Link to='/login'>Login</Link>
+						If you have an account you can <Link to='/'>Login</Link>
 					</p>
 				</form>
 			</div>

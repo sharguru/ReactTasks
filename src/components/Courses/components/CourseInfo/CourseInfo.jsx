@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { buttonTextConstant, mockedCoursesList } from '../../../../constants';
+import { buttonTextConstant } from '../../../../constants';
 import { useParams, Link } from 'react-router-dom';
 import { getFullAuthors } from '../../../../helpers/getFullAuthors';
+import { useSelector } from 'react-redux';
 const CourseInfo = (props) => {
 	const { courseId } = useParams();
-	const [courseDetail, setCourseDetail] = useState({
-		authors: [],
-	});
-
+	const courseArr = useSelector((state) => state.course);
+	const [courseDetail, setCourseDetail] = useState({});
 	useEffect(() => {
 		setCourseDetail(
-			mockedCoursesList.filter((item) => item.id === courseId)[0]
+			//change mockedCourse to store date
+			courseArr.filter((item) => item.id === courseId)[0]
 		);
-	}, [courseId]);
+	}, [courseId, courseArr]);
 
 	return (
 		<>

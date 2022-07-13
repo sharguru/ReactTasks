@@ -5,26 +5,33 @@ import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
 import { buttonTextConstant } from '../../constants';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteCourse } from '../../store/courses/actions';
-const Courses = (props) => {
-	const [searchTerm, setSearchTerm] = useState('');
-	const courseArr = useSelector((state) => state.course);
-	const [courseList, setCourseList] = useState(courseArr);
+import {
+	deleteCourse,
+	setInitialStateToCourse,
+} from '../../store/courses/actions';
+import { setInitialStateToAuthor } from '../../store/authors/actions';
+import { getAllCourses } from '../../service';
+
+const Courses = () => {
 	const dispatch = useDispatch();
-	const tokenAvailable = useSelector((state) => state.user.isAuth);
 	const navigate = useNavigate();
+	const tokenAvailable = localStorage.getItem('token');
+	const courseArr = useSelector((state) => state.course);
+
+	const [searchTerm, setSearchTerm] = useState('');
+	const [courseList, setCourseList] = useState(courseArr);
+
 	const createCourseButtonClick = () => {
 		navigate('/courses/add');
 	};
 	const handleSearch = () => {
 		if (searchTerm.length !== 0) {
-			setCourseList((preval) => {
-				let newArr = preval.filter(
+			setCourseList(
+				courseArr.filter(
 					(item) =>
 						item.id.includes(searchTerm) || item.title.includes(searchTerm)
-				);
-				return newArr;
-			});
+				)
+			);
 		} else if (searchTerm.length === 0) {
 			setCourseList(courseArr);
 		}
@@ -32,14 +39,18 @@ const Courses = (props) => {
 	const handleCourseDeleteClick = (id) => {
 		dispatch(deleteCourse(id));
 	};
+
 	useEffect(() => {
 		setCourseList(courseArr);
-
 		if (!tokenAvailable) {
 			alert('Please login to access the course');
-			navigate('/login');
+			navigate('/');
 		}
-	}, [navigate, tokenAvailable, courseArr]);
+	}, [navigate, tokenAvailable, courseArr, dispatch]);
+	useEffect(() => {
+		dispatch(setInitialStateToCourse(getAllCourses()));
+		dispatch(setInitialStateToAuthor(getAllCourses()));
+	}, []);
 	return (
 		<>
 			{tokenAvailable && (

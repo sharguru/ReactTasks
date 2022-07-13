@@ -12,10 +12,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addNewCourse } from '../../store/courses/actions';
 import { addAuthor } from '../../store/authors/actions';
 const CreateCourse = () => {
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const authArray = useSelector((state) => state.author);
 	// state variables
 
 	const [durationInHrs, setDurationInHrs] = useState(0);
-	const authArray = useSelector((state) => state.author);
 	const [availableAuthors, setAvailableAuthors] = useState(authArray);
 	const [selectedAuthor, setSelectedAuthor] = useState([]);
 	const [courseDetails, setCourseDetails] = useState({
@@ -26,33 +28,10 @@ const CreateCourse = () => {
 		duration: 0,
 		authors: [],
 	});
-	useEffect(() => {
-		setAvailableAuthors(authArray);
-		console.log(authArray);
-	}, [authArray]);
-
 	const [authorDetail, setAuthorDetail] = useState({
 		name: '',
 		id: '',
 	});
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		let date = new Date();
-		let authId = [];
-		selectedAuthor.map((item) => authId.push(item.id));
-		setCourseDetails((preval) => {
-			return {
-				...preval,
-				creationDate: `${date.getDate()}/${
-					date.getMonth() + 1
-				}/${date.getFullYear()}`,
-				authors: authId,
-				id: uuidv4(),
-			};
-		});
-	}, [selectedAuthor]);
-	const navigate = useNavigate();
 
 	const selectAuthor = (e) => {
 		let newAuthors = availableAuthors.filter((item) => item.id === e.target.id);
@@ -110,6 +89,30 @@ const CreateCourse = () => {
 	};
 	const handleAuthorDetailChange = (e) =>
 		setAuthorDetail({ name: e.target.value, id: uuidv4() });
+
+	useEffect(() => {
+		//filter the selected authors
+		setAvailableAuthors(
+			authArray.filter((item) => !selectedAuthor.includes(item))
+		);
+		console.log(authArray);
+	}, [authArray, selectedAuthor]);
+
+	useEffect(() => {
+		let date = new Date();
+		let authId = [];
+		selectedAuthor.map((item) => authId.push(item.id));
+		setCourseDetails((preval) => {
+			return {
+				...preval,
+				creationDate: `${date.getDate()}/${
+					date.getMonth() + 1
+				}/${date.getFullYear()}`,
+				authors: authId,
+				id: uuidv4(),
+			};
+		});
+	}, [selectedAuthor]);
 
 	return (
 		<div className='m-3 border border-warning p-3'>

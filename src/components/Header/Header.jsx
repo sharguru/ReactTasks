@@ -9,9 +9,11 @@ const Header = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user);
+	const token = localStorage.getItem('token');
+
 	const handleLogoutClick = () => {
 		dispatch(removeUserInfo());
-		navigate('/login');
+		navigate('');
 		localStorage.clear();
 	};
 
@@ -19,7 +21,7 @@ const Header = () => {
 		<div className='p-3 border border-danger m-3 d-flex justify-content-between'>
 			<Logo />
 			<div className='d-flex'>
-				{user.name !== '' && (
+				{token && (
 					<>
 						<p className='p-2 '>{user.name}</p>
 						<Button
