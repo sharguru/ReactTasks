@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthorItem from './components/AuthorItem/AuthorItem';
-import {
-	addtoAuthors,
-	addToCourse,
-	buttonTextConstant,
-	mockedAuthorsList,
-} from '../../constants';
+import { buttonTextConstant } from '../../constants';
 import { getCourseDuration } from '../../helpers/getCourseDuration';
 import Duration from './components/Duration/Duration';
 import TitleDescription from './components/TitleDescription/TitleDescription';
 import { v4 as uuidv4 } from 'uuid';
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { addNewCourse } from '../../store/courses/actions';
+import { addAuthor } from '../../store/authors/actions';
 const CreateCourse = () => {
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const authArray = useSelector((state) => state.author);
 	// state variables
 
 	const [durationInHrs, setDurationInHrs] = useState(0);
-	const [availableAuthors, setAvailableAuthors] = useState(mockedAuthorsList);
+	const [availableAuthors, setAvailableAuthors] = useState(authArray);
 	const [selectedAuthor, setSelectedAuthor] = useState([]);
 	const [courseDetails, setCourseDetails] = useState({
 		id: '',
@@ -32,23 +32,6 @@ const CreateCourse = () => {
 		name: '',
 		id: '',
 	});
-
-	useEffect(() => {
-		let date = new Date();
-		let authId = [];
-		selectedAuthor.map((item) => authId.push(item.id));
-		setCourseDetails((preval) => {
-			return {
-				...preval,
-				creationDate: `${date.getDate()}/${
-					date.getMonth() + 1
-				}/${date.getFullYear()}`,
-				authors: authId,
-				id: uuidv4(),
-			};
-		});
-	}, [selectedAuthor]);
-	const navigate = useNavigate();
 
 	const selectAuthor = (e) => {
 		let newAuthors = availableAuthors.filter((item) => item.id === e.target.id);
@@ -80,16 +63,17 @@ const CreateCourse = () => {
 		) {
 			alert('Please! fil in all fields');
 		} else {
-			addToCourse(courseDetails);
+			dispatch(addNewCourse([courseDetails]));
 			navigate('/courses');
 		}
 	};
 
 	const addNewAuthor = () => {
+		console.log('clicked');
 		if (authorDetail.name !== '') {
-			addtoAuthors(authorDetail);
+			dispatch(addAuthor([authorDetail]));
 			setAvailableAuthors(
-				mockedAuthorsList.filter((item) => !selectedAuthor.includes(item))
+				availableAuthors.filter((item) => !selectedAuthor.includes(item))
 			);
 			setAuthorDetail({ name: '', id: '' });
 		}
@@ -105,6 +89,30 @@ const CreateCourse = () => {
 	};
 	const handleAuthorDetailChange = (e) =>
 		setAuthorDetail({ name: e.target.value, id: uuidv4() });
+
+	useEffect(() => {
+		//filter the selected authors
+		setAvailableAuthors(
+			authArray.filter((item) => !selectedAuthor.includes(item))
+		);
+		console.log(authArray);
+	}, [authArray, selectedAuthor]);
+
+	useEffect(() => {
+		let date = new Date();
+		let authId = [];
+		selectedAuthor.map((item) => authId.push(item.id));
+		setCourseDetails((preval) => {
+			return {
+				...preval,
+				creationDate: `${date.getDate()}/${
+					date.getMonth() + 1
+				}/${date.getFullYear()}`,
+				authors: authId,
+				id: uuidv4(),
+			};
+		});
+	}, [selectedAuthor]);
 
 	return (
 		<div className='m-3 border border-warning p-3'>

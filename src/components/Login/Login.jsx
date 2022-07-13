@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
 import { buttonTextConstant } from '../../constants';
 import { Link, useNavigate } from 'react-router-dom';
-import { Axios } from '../../axios';
+import { useDispatch } from 'react-redux';
+import { addUserInfo } from '../../store/user/actions';
+import { login } from '../../service';
 const Login = () => {
 	const navigate = useNavigate();
-
+	const dispatch = useDispatch();
 	const [loginDetails, setLoginDetails] = useState({
 		email: '',
 		password: '',
@@ -16,22 +18,43 @@ const Login = () => {
 			return { ...preval, [e.target.name]: e.target.value };
 		});
 	};
-	const handleLoginSubmit = async (e) => {
+	const handleLoginSubmit = (e) => {
 		e.preventDefault();
-		await Axios.post('/login', loginDetails)
+		login(loginDetails)
 			.then((res) => {
 				if (res.status === 201) {
 					localStorage.setItem('token', res.data.result);
-					localStorage.setItem('user', res.data.user.name);
-					if (localStorage.getItem('token')) {
-						navigate('/courses');
-					}
+					localStorage.setItem('user', JSON.stringify(res.data.user));
+					console.log({
+						user: JSON.parse(localStorage.getItem('user')),
+						result: res.data.result,
+					});
+					dispatch(
+						addUserInfo({
+							user: JSON.parse(localStorage.getItem('user')),
+							result: res.data.result,
+						})
+					);
+
+					navigate('/courses');
 				}
 			})
 			.catch((e) => {
 				return <p>Sorry, Login Failed</p>;
 			});
 	};
+
+	useEffect(() => {
+		if (localStorage.getItem('token')) {
+			dispatch(
+				addUserInfo({
+					user: JSON.parse(localStorage.getItem('user')),
+					result: localStorage.getItem('token'),
+				})
+			);
+			navigate('/courses');
+		}
+	}, []);
 	return (
 		<div
 			className='w-100 border border-danger m-3 '

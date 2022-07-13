@@ -3,37 +3,54 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../common/Button/Button';
 import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
-import { buttonTextConstant, mockedCoursesList } from '../../constants';
-const Courses = (props) => {
-	const [searchTerm, setSearchTerm] = useState('');
-	const [courseList, setCourseList] = useState(mockedCoursesList);
-	const token = localStorage.getItem('token');
-	const [tokenAvailable, setTokenAvailable] = useState(false);
+import { buttonTextConstant } from '../../constants';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+	deleteCourse,
+	setInitialStateToCourse,
+} from '../../store/courses/actions';
+import { setInitialStateToAuthor } from '../../store/authors/actions';
+import { getAllCourses } from '../../service';
 
+const Courses = () => {
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const tokenAvailable = localStorage.getItem('token');
+	const courseArr = useSelector((state) => state.course);
+
+	const [searchTerm, setSearchTerm] = useState('');
+	const [courseList, setCourseList] = useState(courseArr);
+
 	const createCourseButtonClick = () => {
 		navigate('/courses/add');
 	};
 	const handleSearch = () => {
 		if (searchTerm.length !== 0) {
-			setCourseList((preVal) => {
-				let newArr = preVal.filter(
+			setCourseList(
+				courseArr.filter(
 					(item) =>
 						item.id.includes(searchTerm) || item.title.includes(searchTerm)
-				);
-				return newArr;
-			});
+				)
+			);
+		} else if (searchTerm.length === 0) {
+			setCourseList(courseArr);
 		}
 	};
+	const handleCourseDeleteClick = (id) => {
+		dispatch(deleteCourse(id));
+	};
+
 	useEffect(() => {
-		if (token === 'null') {
-			setTokenAvailable(false);
+		setCourseList(courseArr);
+		if (!tokenAvailable) {
 			alert('Please login to access the course');
-			navigate('/login');
-		} else if (token !== null) {
-			setTokenAvailable(true);
+			navigate('/');
 		}
-	}, [token, navigate]);
+	}, [navigate, tokenAvailable, courseArr, dispatch]);
+	useEffect(() => {
+		dispatch(setInitialStateToCourse(getAllCourses()));
+		dispatch(setInitialStateToAuthor(getAllCourses()));
+	}, []);
 	return (
 		<>
 			{tokenAvailable && (
@@ -51,7 +68,11 @@ const Courses = (props) => {
 					</span>
 					{courseList !== [] &&
 						courseList.map((item, index) => (
-							<CourseCard course={item} key={index} />
+							<CourseCard
+								course={item}
+								key={index}
+								handleCourseDeleteClick={handleCourseDeleteClick}
+							/>
 						))}
 				</div>
 			)}

@@ -5,11 +5,13 @@ import { formatDate } from '../../../../helpers/formatCreationDate';
 import { getAuthors } from '../../../../helpers/getAuthorNames';
 import { buttonTextConstant } from '../../../../constants';
 import { useNavigate } from 'react-router-dom';
-
-const CourseCard = ({ course }) => {
+const CourseCard = ({ course, handleCourseDeleteClick }) => {
 	const navigate = useNavigate();
 	const handleCourseClick = () => {
 		navigate(`/courses/${course.id}`);
+	};
+	const handleDelete = () => {
+		handleCourseDeleteClick(course.id);
 	};
 	return (
 		<div className='border-primary p-3 d-flex flex-row justify-content-between border mt-3'>
@@ -24,6 +26,17 @@ const CourseCard = ({ course }) => {
 				<Button
 					buttonText={buttonTextConstant.SHOW_COURSE}
 					click={handleCourseClick}
+					className='me-3'
+				/>
+				<Button
+					buttonText={buttonTextConstant.EDIT}
+					// click={handleCourseClick}
+					className='me-3'
+				/>
+				<Button
+					buttonText={buttonTextConstant.DELETE}
+					click={handleDelete}
+					className='me-3'
 				/>
 			</div>
 		</div>
