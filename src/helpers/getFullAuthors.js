@@ -1,9 +1,7 @@
-import { mockedAuthorsList } from '../constants';
-
-export const getFullAuthors = (authArr) => {
+export const getFullAuthors = (authArr, authors) => {
 	var authorstr = '';
 	authArr?.forEach((element) => {
-		mockedAuthorsList.forEach((e) => {
+		authors.forEach((e) => {
 			if (e.id === element) {
 				authorstr = authorstr + e.name + ',';
 			}

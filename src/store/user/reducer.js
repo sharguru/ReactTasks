@@ -1,22 +1,23 @@
-import { ADD_USER, REMOVE_USER } from './types';
+import { ADD_USER, GET_CURRENT_USER, REMOVE_USER } from './types';
 
 const userInitialState = {
-	isAuth: false, // default value - false. After success login - true
-	name: '', // default value - empty string. After success login - name of user
-	email: '', // default value - empty string. After success login - email of user
-	token: '', // default value - empty string or token value from localStorage.
+	isAuth: false,
+	name: '',
+	email: '',
+	token: '',
+	role: '',
 };
 
 export const userReducer = (state = userInitialState, action) => {
 	switch (action.type) {
 		case ADD_USER:
-			console.log(action.payload);
 			return {
 				...state,
-				name: action.payload.user.name,
-				email: action.payload.user.email,
-				token: action.payload.result,
+				name: action.payload.name,
+				email: action.payload.email,
+				token: action.payload.tokenn,
 				isAuth: true,
+				role: action.payload.role,
 			};
 		case REMOVE_USER: {
 			return {
@@ -27,6 +28,8 @@ export const userReducer = (state = userInitialState, action) => {
 				isAuth: false,
 			};
 		}
+		case GET_CURRENT_USER:
+			return state;
 		default:
 			return state;
 	}
