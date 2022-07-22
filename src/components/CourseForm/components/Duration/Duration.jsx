@@ -25,4 +25,4 @@ const Duration = (props) => {
 	);
 };
 
-export default Duration;
+export default React.memo(Duration);

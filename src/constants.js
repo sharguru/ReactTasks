@@ -12,6 +12,7 @@ export const buttonTextConstant = {
 	BACKBUTTON: '◀Back to Courses',
 	DELETE: <i className='bi bi-trash'></i>,
 	EDIT: <i className='bi bi-pencil'></i>,
+	UPDATE: 'Update Course',
 };
 export const mockedCoursesList = [
 	{

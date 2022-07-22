@@ -7,9 +7,15 @@ import {
 	UPDATE_COURSE,
 } from './types';
 
-export const addNewCourse = (payload) => ({ type: ADD_COURSE, payload });
-export const deleteCourse = (payload) => ({ type: DELETE_COURSE, payload });
-export const updateCourse = (payload) => ({ type: UPDATE_COURSE, payload });
+export const addNewCourseAction = (payload) => ({ type: ADD_COURSE, payload });
+export const deleteCourseAction = (payload) => ({
+	type: DELETE_COURSE,
+	payload,
+});
+export const updateCourseAction = (payload) => ({
+	type: UPDATE_COURSE,
+	payload,
+});
 export const filterCourse = (payload) => ({ type: FILTER_COURSE, payload });
 export const getCourse = (payload) => ({ type: GET_COURSE, payload });
 export const setInitialStateToCourse = (payload) => ({

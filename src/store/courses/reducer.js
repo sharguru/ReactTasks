@@ -16,7 +16,23 @@ export const courseReducer = (state = courseInitialState, action) => {
 		case DELETE_COURSE:
 			return state.filter((item) => item.id !== action.payload);
 		case UPDATE_COURSE:
-			return state;
+			let res = state.filter((item) => item.id === action.payload.id);
+			return {
+				...state,
+				...[
+					{
+						...res,
+						...action.payload,
+					},
+				],
+			};
+		// if (item.id === action.payload.id) {
+		// 	return {
+		// 		...item,
+		// 		...action.payload,
+		// 	};
+		// }
+
 		case FILTER_COURSE:
 			return state.filter(
 				(item) =>

@@ -1,6 +1,6 @@
 import { getFullAuthors } from './getFullAuthors';
-export const getAuthors = (authArr) => {
-	let res = getFullAuthors(authArr);
+export const getAuthors = (authArr, authors) => {
+	let res = getFullAuthors(authArr, authors);
 	if (res.length > 25) {
 		res = res.substring(0, 23) + '...';
 	} else {

@@ -1,36 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import AuthorItem from './components/AuthorItem/AuthorItem';
 import { buttonTextConstant } from '../../constants';
 import { getCourseDuration } from '../../helpers/getCourseDuration';
 import Duration from './components/Duration/Duration';
 import TitleDescription from './components/TitleDescription/TitleDescription';
-import { v4 as uuidv4 } from 'uuid';
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
 import { useDispatch, useSelector } from 'react-redux';
-import { addNewCourse } from '../../store/courses/actions';
-import { addAuthor } from '../../store/authors/actions';
-const CreateCourse = () => {
+import { addNewCourse, updateCourse } from '../../store/courses/thunk';
+import { createNewAuthor } from '../../store/authors/thunk';
+const CourseForm = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const authArray = useSelector((state) => state.author);
+	const courseArr = useSelector((state) => state.course);
+	const { courseId } = useParams();
 	// state variables
 
 	const [durationInHrs, setDurationInHrs] = useState(0);
 	const [availableAuthors, setAvailableAuthors] = useState(authArray);
 	const [selectedAuthor, setSelectedAuthor] = useState([]);
 	const [courseDetails, setCourseDetails] = useState({
-		id: '',
 		title: '',
 		description: '',
-		creationDate: '',
 		duration: 0,
 		authors: [],
 	});
 	const [authorDetail, setAuthorDetail] = useState({
 		name: '',
-		id: '',
 	});
 
 	const selectAuthor = (e) => {
@@ -57,25 +55,23 @@ const CreateCourse = () => {
 		if (
 			courseDetails.title === '' ||
 			courseDetails.description === '' ||
-			courseDetails.id === '' ||
 			courseDetails.duration === '' ||
 			courseDetails.authors.length === 0
 		) {
 			alert('Please! fil in all fields');
 		} else {
-			dispatch(addNewCourse([courseDetails]));
+			dispatch(addNewCourse(courseDetails));
 			navigate('/courses');
 		}
 	};
 
 	const addNewAuthor = () => {
-		console.log('clicked');
 		if (authorDetail.name !== '') {
-			dispatch(addAuthor([authorDetail]));
+			dispatch(createNewAuthor(authorDetail));
 			setAvailableAuthors(
 				availableAuthors.filter((item) => !selectedAuthor.includes(item))
 			);
-			setAuthorDetail({ name: '', id: '' });
+			setAuthorDetail({ name: '' });
 		}
 	};
 	const handleCourseDetailsChange = (e) => {
@@ -88,39 +84,72 @@ const CreateCourse = () => {
 		}
 	};
 	const handleAuthorDetailChange = (e) =>
-		setAuthorDetail({ name: e.target.value, id: uuidv4() });
+		setAuthorDetail({ name: e.target.value });
+	const updateCourseClick = () => {
+		dispatch(updateCourse(courseDetails));
+		navigate('/courses');
+	};
 
 	useEffect(() => {
-		//filter the selected authors
 		setAvailableAuthors(
 			authArray.filter((item) => !selectedAuthor.includes(item))
 		);
-		console.log(authArray);
 	}, [authArray, selectedAuthor]);
 
 	useEffect(() => {
-		let date = new Date();
 		let authId = [];
 		selectedAuthor.map((item) => authId.push(item.id));
 		setCourseDetails((preval) => {
 			return {
 				...preval,
-				creationDate: `${date.getDate()}/${
-					date.getMonth() + 1
-				}/${date.getFullYear()}`,
 				authors: authId,
-				id: uuidv4(),
 			};
 		});
 	}, [selectedAuthor]);
+
+	useEffect(() => {
+		if (courseId) {
+			let courseToBeUpdated = courseArr.filter(
+				(item) => item.id === courseId
+			)[0];
+			setCourseDetails(courseToBeUpdated);
+			setAvailableAuthors(
+				authArray.filter((item) => !courseToBeUpdated.authors.includes(item.id))
+			);
+			setSelectedAuthor(
+				authArray.filter((item) => courseToBeUpdated.authors.includes(item.id))
+			);
+		}
+	}, []);
 
 	return (
 		<div className='m-3 border border-warning p-3'>
 			<TitleDescription
 				courseDetails={courseDetails}
 				handleCourseDetailsChange={handleCourseDetailsChange}
-				createCourseClick={createCourseClick}
+				createCourseClick={courseId ? updateCourseClick : createCourseClick}
+				btnText={
+					courseId
+						? buttonTextConstant.UPDATE
+						: buttonTextConstant.CREATE_COURSE
+				}
 			/>
+			{/* {courseId ? (
+				<TitleDescription
+					courseDetails={courseDetails}
+					handleCourseDetailsChange={handleCourseDetailsChange}
+					createCourseClick={updateCourseClick}
+					btnText={buttonTextConstant.UPDATE}
+				/>
+			) : (
+				<TitleDescription
+					courseDetails={courseDetails}
+					handleCourseDetailsChange={handleCourseDetailsChange}
+					createCourseClick={createCourseClick}
+					btnText={buttonTextConstant.CREATE_COURSE}
+				/>
+			)} */}
+
 			<div className='authorlist d-flex justify-content-between border border-danger p-3'>
 				<div className='newAuthor w-50 d-flex flex-column justify-content-between'>
 					<span className='mb-5'>
@@ -198,4 +227,4 @@ const CreateCourse = () => {
 	);
 };
 
-export default CreateCourse;
+export default React.memo(CourseForm);

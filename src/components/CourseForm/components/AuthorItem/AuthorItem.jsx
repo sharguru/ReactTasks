@@ -14,4 +14,4 @@ const AuthorItem = (props) => {
 	);
 };
 
-export default AuthorItem;
+export default React.memo(AuthorItem);

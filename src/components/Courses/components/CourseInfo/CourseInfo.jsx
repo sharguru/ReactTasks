@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { buttonTextConstant } from '../../../../constants';
 import { useParams, Link } from 'react-router-dom';
 import { getFullAuthors } from '../../../../helpers/getFullAuthors';
 import { useSelector } from 'react-redux';
 const CourseInfo = (props) => {
 	const { courseId } = useParams();
-	const courseArr = useSelector((state) => state.course);
-	const [courseDetail, setCourseDetail] = useState({});
-	useEffect(() => {
-		setCourseDetail(
-			//change mockedCourse to store date
-			courseArr.filter((item) => item.id === courseId)[0]
-		);
-	}, [courseId, courseArr]);
+	const courseDetail = useSelector((state) => state.course).filter(
+		(item) => item.id === courseId
+	)[0];
+	const authors = useSelector((state) => state.author);
 
 	return (
 		<>
@@ -40,15 +36,14 @@ const CourseInfo = (props) => {
 						<h6>
 							Authors :
 							<span className='fw-lighter'>
-								{getFullAuthors(courseDetail?.authors)}
+								{getFullAuthors(courseDetail?.authors, authors)}
 							</span>
 						</h6>
 					</div>
 				</div>
 			</div>
-			{/* )} */}
 		</>
 	);
 };
 
-export default CourseInfo;
+export default React.memo(CourseInfo);

@@ -1,11 +1,11 @@
 import React from 'react';
 import Button from '../../../../common/Button/Button';
 import Input from '../../../../common/Input/Input';
-import { buttonTextConstant } from '../../../../constants';
 const TitleDescription = ({
 	courseDetails,
 	handleCourseDetailsChange,
 	createCourseClick,
+	btnText,
 }) => {
 	return (
 		<>
@@ -22,10 +22,7 @@ const TitleDescription = ({
 						change={handleCourseDetailsChange}
 					/>
 				</span>
-				<Button
-					buttonText={buttonTextConstant.CREATE_COURSE}
-					click={createCourseClick}
-				/>
+				<Button buttonText={btnText} click={createCourseClick} />
 			</div>
 			<span className='d-flex flex-column w-100 mb-3'>
 				<label className='d-flex' htmlFor='courseDescription'>

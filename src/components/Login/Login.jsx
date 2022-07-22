@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addUserInfo } from '../../store/user/actions';
 import { login } from '../../service';
+
 const Login = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -23,19 +24,8 @@ const Login = () => {
 		login(loginDetails)
 			.then((res) => {
 				if (res.status === 201) {
-					localStorage.setItem('token', res.data.result);
+					localStorage.setItem('token', res.data.result.split(' ')[1]);
 					localStorage.setItem('user', JSON.stringify(res.data.user));
-					console.log({
-						user: JSON.parse(localStorage.getItem('user')),
-						result: res.data.result,
-					});
-					dispatch(
-						addUserInfo({
-							user: JSON.parse(localStorage.getItem('user')),
-							result: res.data.result,
-						})
-					);
-
 					navigate('/courses');
 				}
 			})

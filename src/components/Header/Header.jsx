@@ -5,6 +5,8 @@ import { buttonTextConstant } from '../../constants';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeUserInfo } from '../../store/user/actions';
+import { logout } from '../../service';
+
 const Header = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -12,9 +14,13 @@ const Header = () => {
 	const token = localStorage.getItem('token');
 
 	const handleLogoutClick = () => {
-		dispatch(removeUserInfo());
-		navigate('');
-		localStorage.clear();
+		logout()
+			.then((res) => {
+				navigate('');
+				dispatch(removeUserInfo());
+				localStorage.clear();
+			})
+			.catch((err) => console.log(err));
 	};
 
 	return (
