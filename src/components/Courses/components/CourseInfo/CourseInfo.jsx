@@ -46,4 +46,4 @@ const CourseInfo = (props) => {
 	);
 };
 
-export default CourseInfo;
+export default React.memo(CourseInfo);

@@ -124,7 +124,17 @@ const CourseForm = () => {
 
 	return (
 		<div className='m-3 border border-warning p-3'>
-			{courseId ? (
+			<TitleDescription
+				courseDetails={courseDetails}
+				handleCourseDetailsChange={handleCourseDetailsChange}
+				createCourseClick={courseId ? updateCourseClick : createCourseClick}
+				btnText={
+					courseId
+						? buttonTextConstant.UPDATE
+						: buttonTextConstant.CREATE_COURSE
+				}
+			/>
+			{/* {courseId ? (
 				<TitleDescription
 					courseDetails={courseDetails}
 					handleCourseDetailsChange={handleCourseDetailsChange}
@@ -138,7 +148,7 @@ const CourseForm = () => {
 					createCourseClick={createCourseClick}
 					btnText={buttonTextConstant.CREATE_COURSE}
 				/>
-			)}
+			)} */}
 
 			<div className='authorlist d-flex justify-content-between border border-danger p-3'>
 				<div className='newAuthor w-50 d-flex flex-column justify-content-between'>
@@ -217,4 +227,4 @@ const CourseForm = () => {
 	);
 };
 
-export default CourseForm;
+export default React.memo(CourseForm);

@@ -12,7 +12,6 @@ import { getCurrentUser } from '../../store/user/thunk';
 const Courses = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const tokenAvailable = localStorage.getItem('token');
 	const courseArr = useSelector((state) => state.course);
 	const currentUser = useSelector((state) => state.user);
 	const [searchTerm, setSearchTerm] = useState('');
@@ -36,41 +35,33 @@ const Courses = () => {
 
 	useEffect(() => {
 		setCourseList(courseArr);
-		if (!tokenAvailable) {
-			alert('Please login to access the course');
-			navigate('/');
-		}
-	}, [navigate, tokenAvailable, courseArr, dispatch]);
+	}, [courseArr]);
 	useEffect(() => {
-		if (tokenAvailable) {
-			dispatch(getCurrentUser());
-		}
+		dispatch(getCurrentUser());
 		dispatch(getAllCourses());
 		dispatch(getAllAuthors());
 	}, []);
 	return (
 		<>
-			{tokenAvailable && (
-				<div className='p-3 border border-success m-3'>
-					<span className='d-flex w-100 justify-content-between'>
-						<SearchBar
-							searchTerm={searchTerm}
-							setFunction={setSearchTerm}
-							submit={handleSearch}
+			<div className='p-3 border border-success m-3'>
+				<span className='d-flex w-100 justify-content-between'>
+					<SearchBar
+						searchTerm={searchTerm}
+						setFunction={setSearchTerm}
+						submit={handleSearch}
+					/>
+					{currentUser.role === 'admin' && (
+						<Button
+							buttonText={buttonTextConstant.ADD_NEW_COURSE}
+							click={createCourseButtonClick}
 						/>
-						{currentUser.role === 'admin' && (
-							<Button
-								buttonText={buttonTextConstant.ADD_NEW_COURSE}
-								click={createCourseButtonClick}
-							/>
-						)}
-					</span>
-					{courseList !== [] &&
-						courseList.map((item, index) => (
-							<CourseCard course={item} key={index} />
-						))}
-				</div>
-			)}
+					)}
+				</span>
+				{courseList !== [] &&
+					courseList.map((item, index) => (
+						<CourseCard course={item} key={index} />
+					))}
+			</div>
 		</>
 	);
 };

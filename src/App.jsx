@@ -16,8 +16,14 @@ const App = () => {
 			<Routes>
 				<Route path='/' exact element={<Login />} />
 				<Route path='register' element={<Registration />} />
-				<Route path='courses' element={<Courses />} />
-				{/* <Route path='courses/add' element={<CourseForm />} /> */}
+				<Route
+					path='courses'
+					element={
+						<PrivateRoute>
+							<Courses />
+						</PrivateRoute>
+					}
+				/>
 				<Route path='courses/:courseId' element={<CourseInfo />} />
 				<Route
 					path='/courses/add'
