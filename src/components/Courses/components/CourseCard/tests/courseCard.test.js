@@ -1,20 +1,10 @@
-import {
-	render,
-	cleanup,
-	fireEvent,
-	screen,
-	within,
-} from '@testing-library/react';
 import CourseCard from '../CourseCard';
-import { Provider } from 'react-redux';
 import '@testing-library/jest-dom';
-import { mockedState } from '../../../../../constants';
+import { mockedState } from '../../../../../mockedContantsForTest';
 import { getCourseDuration } from '../../../../../helpers/getCourseDuration';
 import { renderWithProviders } from '../../../../../testUtil';
-import Courses from '../../../Courses';
 import { getAuthors } from '../../../../../helpers/getAuthorNames';
 import { formatDate } from '../../../../../helpers/formatCreationDate';
-// import { render } from 'react-dom';
 const mockedData = {
 	title: 'test title',
 	description: 'test description',
@@ -26,22 +16,12 @@ const mockedData = {
 	creationDate: '9/3/2021',
 };
 
-const mockedStore = {
-	getState: () => mockedState,
-	subscribe: jest.fn(),
-	dispatch: jest.fn(),
-};
 const renderComponent = () => {
-	return renderWithProviders(
-		// <Courses>
-		<CourseCard course={mockedData} />
-		//</Courses>
-	);
+	return renderWithProviders(<CourseCard course={mockedData} />);
 };
-describe('courseCard tests', () => {
+describe('<CourseCard/> component tests', () => {
 	test('display title', () => {
 		const { getByTestId } = renderComponent();
-		// console.log(getByTestId('title').innerHTML);
 		const titleElement = getByTestId('title');
 		expect(titleElement).toBeDefined();
 		expect(titleElement).not.toBeNull();
@@ -56,18 +36,14 @@ describe('courseCard tests', () => {
 	});
 	test('duration in correct format', () => {
 		const { getByTestId } = renderComponent();
-
 		let durationStr = getByTestId('duration');
 		expect(getCourseDuration(70)).toBe('01:10 hours');
 		expect(durationStr).not.toBeNull();
-
 		expect(durationStr.innerHTML).toEqual('Duration: ' + getCourseDuration(67));
 	});
 
-	// CourseCard should display authors list
 	test('author list', () => {
 		const { getByTestId } = renderComponent();
-
 		let authorStr = getByTestId('author');
 		expect(authorStr).toBeDefined();
 		expect(authorStr).not.toBeNull();
@@ -76,11 +52,8 @@ describe('courseCard tests', () => {
 		);
 	});
 
-	// CourseCard should display created date in the correct format
-
 	test('date format', () => {
 		const { getByTestId } = renderComponent();
-
 		let dateStr = getByTestId('dateCreated');
 		expect(dateStr).toBeDefined();
 		expect(dateStr).not.toBeNull();

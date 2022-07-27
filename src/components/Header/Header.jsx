@@ -2,24 +2,22 @@ import React from 'react';
 import Logo from './components/Logo/Logo';
 import Button from '../../common/Button/Button';
 import { buttonTextConstant } from '../../constants';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeUserInfo } from '../../store/user/actions';
 import { logout } from '../../service';
 
 const Header = () => {
-	// const navigate = useNavigate();
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user);
-	const token = localStorage.getItem('token');
-
+	const token = user.token;
 	const handleLogoutClick = () => {
 		logout()
 			.then((res) => {
-				// navigate('/');
+				navigate('/');
 				dispatch(removeUserInfo());
 				localStorage.clear();
-				<Navigate to='/' />;
 			})
 			.catch((err) => console.log('error: ', err));
 	};

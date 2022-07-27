@@ -4,24 +4,23 @@ import { getCourseDuration } from '../../../../helpers/getCourseDuration';
 import { formatDate } from '../../../../helpers/formatCreationDate';
 import { getAuthors } from '../../../../helpers/getAuthorNames';
 import { buttonTextConstant } from '../../../../constants';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteCourse } from '../../../../store/courses/thunk';
 const CourseCard = ({ course }) => {
-	// const navigate = useNavigate();
+	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const currentUser = useSelector((state) => state.user);
 	const authors = useSelector((state) => state.author);
 	const handleCourseClick = () => {
-		<Navigate to={`/courses/${course.id}`} />;
-		// (`/courses/${course.id}`);
+		navigate(`/courses/${course.id}`);
 	};
 	const handleDelete = () => {
 		dispatch(deleteCourse(course.id));
-		// handleCourseDeleteClick(course.id);
 	};
 	const handleUpdateClick = () => {
-		<Navigate to={`/courses/update/${course.id}`} />;
+		// <Navigate to={`/courses/update/${course.id}`} />;
+		navigate(`/courses/update/${course.id}`);
 	};
 	return (
 		<div

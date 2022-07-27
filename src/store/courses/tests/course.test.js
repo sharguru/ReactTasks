@@ -1,4 +1,4 @@
-import { mockedState } from '../../../constants';
+import { mockedState } from '../../../mockedContantsForTest';
 import { addNewCourseAction } from '../actions';
 import { courseReducer } from '../reducer';
 const mockedData = {
@@ -12,13 +12,15 @@ const mockedData = {
 	],
 	id: '66cc289e-6de9-49b2-9ca7-8b4f409d6467',
 };
-test('reducer returning intial state', () => {
-	expect(courseReducer(undefined, {})).toEqual([]);
-});
+describe('Course Reducer Tests', () => {
+	test('reducer returning intial state', () => {
+		expect(courseReducer(undefined, {})).toEqual([]);
+	});
 
-test('do Save_course and return new state', () => {
-	const previousState = [];
-	expect(
-		courseReducer(previousState, addNewCourseAction([mockedData]))
-	).toEqual(mockedState.course);
+	test('do Save_course and return new state', () => {
+		const previousState = [];
+		expect(
+			courseReducer(previousState, addNewCourseAction([mockedData]))
+		).toEqual(mockedState.course);
+	});
 });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../common/Button/Button';
 import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
@@ -18,8 +18,7 @@ const Courses = () => {
 	const [courseList, setCourseList] = useState(courseArr);
 
 	const createCourseButtonClick = () => {
-		// <Navigate to='/courses/add' />;
-		navigate('/course/add');
+		navigate('/courses/add');
 	};
 	const handleSearch = () => {
 		if (searchTerm.length !== 0) {

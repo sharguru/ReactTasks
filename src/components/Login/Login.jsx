@@ -3,13 +3,10 @@ import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
 import { buttonTextConstant } from '../../constants';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { addUserInfo } from '../../store/user/actions';
 import { login } from '../../service';
 
 const Login = () => {
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
 	const [loginDetails, setLoginDetails] = useState({
 		email: '',
 		password: '',
@@ -36,15 +33,9 @@ const Login = () => {
 
 	useEffect(() => {
 		if (localStorage.getItem('token')) {
-			dispatch(
-				addUserInfo({
-					user: JSON.parse(localStorage.getItem('user')),
-					result: localStorage.getItem('token'),
-				})
-			);
 			navigate('/courses');
 		}
-	}, []);
+	}, [navigate]);
 	return (
 		<div
 			className='w-100 border border-danger m-3 '
