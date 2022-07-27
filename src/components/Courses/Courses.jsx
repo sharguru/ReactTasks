@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import Button from '../../common/Button/Button';
 import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
@@ -18,7 +18,8 @@ const Courses = () => {
 	const [courseList, setCourseList] = useState(courseArr);
 
 	const createCourseButtonClick = () => {
-		navigate('/courses/add');
+		// <Navigate to='/courses/add' />;
+		navigate('/course/add');
 	};
 	const handleSearch = () => {
 		if (searchTerm.length !== 0) {
@@ -43,7 +44,7 @@ const Courses = () => {
 	}, []);
 	return (
 		<>
-			<div className='p-3 border border-success m-3'>
+			<div className='p-3 border border-success m-3' data-testid='courses'>
 				<span className='d-flex w-100 justify-content-between'>
 					<SearchBar
 						searchTerm={searchTerm}
@@ -52,8 +53,10 @@ const Courses = () => {
 					/>
 					{currentUser.role === 'admin' && (
 						<Button
+							role='buttonForTesting'
 							buttonText={buttonTextConstant.ADD_NEW_COURSE}
 							click={createCourseButtonClick}
+							testId='buttonForTesting'
 						/>
 					)}
 				</span>

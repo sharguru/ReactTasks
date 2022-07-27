@@ -123,7 +123,7 @@ const CourseForm = () => {
 	}, []);
 
 	return (
-		<div className='m-3 border border-warning p-3'>
+		<div className='m-3 border border-warning p-3' data-testid='courseForm'>
 			<TitleDescription
 				courseDetails={courseDetails}
 				handleCourseDetailsChange={handleCourseDetailsChange}
@@ -134,26 +134,15 @@ const CourseForm = () => {
 						: buttonTextConstant.CREATE_COURSE
 				}
 			/>
-			{/* {courseId ? (
-				<TitleDescription
-					courseDetails={courseDetails}
-					handleCourseDetailsChange={handleCourseDetailsChange}
-					createCourseClick={updateCourseClick}
-					btnText={buttonTextConstant.UPDATE}
-				/>
-			) : (
-				<TitleDescription
-					courseDetails={courseDetails}
-					handleCourseDetailsChange={handleCourseDetailsChange}
-					createCourseClick={createCourseClick}
-					btnText={buttonTextConstant.CREATE_COURSE}
-				/>
-			)} */}
 
 			<div className='authorlist d-flex justify-content-between border border-danger p-3'>
 				<div className='newAuthor w-50 d-flex flex-column justify-content-between'>
 					<span className='mb-5'>
-						<h4 className='mx-auto' style={{ width: 'fit-content' }}>
+						<h4
+							data-testid='courseFormAuthor'
+							className='mx-auto'
+							style={{ width: 'fit-content' }}
+						>
 							Add author
 						</h4>
 						<label className='d-flex' htmlFor='createAuthor'>
