@@ -33,19 +33,12 @@ describe('courses test', () => {
 	});
 
 	test('courseForm after button click', async () => {
-		const { getByText, getByRole, getByTestId } = renderComponent();
+		const { getByTestId } = renderComponent();
 		const buttonElement = getByTestId('buttonForTesting');
 		await waitFor(() =>
 			expect(getByTestId('buttonForTesting')).toBeInTheDocument()
 		);
 		fireEvent.click(buttonElement);
-		expect(mockedUsedNavigate).toBeCalledTimes(2);
-		// expect(screen.getByTestId('courseFormAuthor')).toBeInTheDocument();
-		// buttonElement.click();
-		// expect(mockOnClick).toHaveBeenCalledTimes(1);
-		// expect(mockOnClick.mock.calls.length).toEqual(1);
-
-		// expect(fireEvent.click(buttonElement)).toEqual(mockOnClick);
-		// expect(history.location).toContain('/course/add');
+		expect(mockedUsedNavigate).toBeCalledTimes(1);
 	});
 });

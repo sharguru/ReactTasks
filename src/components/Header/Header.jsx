@@ -21,7 +21,7 @@ const Header = () => {
 				localStorage.clear();
 				<Navigate to='/' />;
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.log('error: ', err));
 	};
 
 	return (
