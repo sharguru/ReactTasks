@@ -17,23 +17,32 @@ const CourseCard = ({ course }) => {
 	};
 	const handleDelete = () => {
 		dispatch(deleteCourse(course.id));
-		// handleCourseDeleteClick(course.id);
 	};
 	const handleUpdateClick = () => {
+		// <Navigate to={`/courses/update/${course.id}`} />;
 		navigate(`/courses/update/${course.id}`);
 	};
 	return (
-		<div className='border-primary p-3 d-flex flex-row justify-content-between border mt-3'>
+		<div
+			data-testid='courseCard'
+			className='border-primary p-3 d-flex flex-row justify-content-between border mt-3'
+		>
 			<div className='w-75 '>
-				<h2>{course?.title}</h2>
-				<p className='pe-3 text-wrap'>
-					{course?.description.substring(0, 400)}
+				<h2 data-testid='title'>{course?.title}</h2>
+				<p className='pe-3 text-wrap' data-testid='description'>
+					{course?.description?.substring(0, 400)}
 				</p>
 			</div>
 			<div className='w-25 float-start'>
-				<h6>Authors: {getAuthors(course?.authors, authors)}</h6>
-				<h6>Duration: {getCourseDuration(course?.duration)}</h6>
-				<h6>Created: {formatDate(course?.creationDate)}</h6>
+				<h6 data-testid='author'>
+					Authors: {getAuthors(course?.authors, authors)}
+				</h6>
+				<h6 data-testid='duration'>
+					Duration: {getCourseDuration(course?.duration)}
+				</h6>
+				<h6 data-testid='dateCreated'>
+					Created: {formatDate(course?.creationDate)}
+				</h6>
 				<Button
 					buttonText={buttonTextConstant.SHOW_COURSE}
 					click={handleCourseClick}

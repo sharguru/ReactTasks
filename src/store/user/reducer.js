@@ -15,7 +15,7 @@ export const userReducer = (state = userInitialState, action) => {
 				...state,
 				name: action.payload.name,
 				email: action.payload.email,
-				token: action.payload.tokenn,
+				token: action.payload.token,
 				isAuth: true,
 				role: action.payload.role,
 			};

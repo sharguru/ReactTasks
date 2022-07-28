@@ -26,7 +26,7 @@ const App = () => {
 				/>
 				<Route path='courses/:courseId' element={<CourseInfo />} />
 				<Route
-					path='/courses/add'
+					path='courses/add'
 					element={
 						<PrivateRoute>
 							<CourseForm />

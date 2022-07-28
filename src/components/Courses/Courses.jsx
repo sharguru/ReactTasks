@@ -43,7 +43,7 @@ const Courses = () => {
 	}, []);
 	return (
 		<>
-			<div className='p-3 border border-success m-3'>
+			<div className='p-3 border border-success m-3' data-testid='courses'>
 				<span className='d-flex w-100 justify-content-between'>
 					<SearchBar
 						searchTerm={searchTerm}
@@ -52,8 +52,10 @@ const Courses = () => {
 					/>
 					{currentUser.role === 'admin' && (
 						<Button
+							role='buttonForTesting'
 							buttonText={buttonTextConstant.ADD_NEW_COURSE}
 							click={createCourseButtonClick}
+							testId='buttonForTesting'
 						/>
 					)}
 				</span>

@@ -11,7 +11,11 @@ const TitleDescription = ({
 		<>
 			<div className='title d-flex justify-content-between mt-3 mb-3'>
 				<span className='d-flex flex-column w-50'>
-					<label className='d-flex' htmlFor='title'>
+					<label
+						className='d-flex'
+						htmlFor='title'
+						data-testid='courseFormTitle'
+					>
 						Title
 					</label>
 					<Input

@@ -11,25 +11,29 @@ const Header = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user);
-	const token = localStorage.getItem('token');
-
+	const token = user.token;
 	const handleLogoutClick = () => {
 		logout()
 			.then((res) => {
-				navigate('');
+				navigate('/');
 				dispatch(removeUserInfo());
 				localStorage.clear();
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.log('error: ', err));
 	};
 
 	return (
 		<div className='p-3 border border-danger m-3 d-flex justify-content-between'>
 			<Logo />
 			<div className='d-flex'>
+				{/* <p className='p-2 ' data-testid='userName'>
+					hello
+				</p> */}
 				{token && (
 					<>
-						<p className='p-2 '>{user.name}</p>
+						<p className='p-2 ' data-testid='userName'>
+							{user.name}
+						</p>
 						<Button
 							buttonText={buttonTextConstant.LOGOUT}
 							click={handleLogoutClick}

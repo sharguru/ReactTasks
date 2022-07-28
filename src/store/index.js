@@ -5,5 +5,10 @@ const store = configureStore({
 	reducer: rootReducer,
 	middleware: [thunk],
 });
-
+export function setupStore(preloadedState) {
+	return configureStore({
+		reducer: rootReducer,
+		preloadedState,
+	});
+}
 export default store;

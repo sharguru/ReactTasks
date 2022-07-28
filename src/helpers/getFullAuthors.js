@@ -1,7 +1,7 @@
 export const getFullAuthors = (authArr, authors) => {
 	var authorstr = '';
 	authArr?.forEach((element) => {
-		authors.forEach((e) => {
+		authors?.forEach((e) => {
 			if (e.id === element) {
 				authorstr = authorstr + e.name + ',';
 			}
