@@ -24,14 +24,12 @@ describe('<CourseCard/> component tests', () => {
 		const { getByTestId } = renderComponent();
 		const titleElement = getByTestId('title');
 		expect(titleElement).toBeDefined();
-		expect(titleElement).not.toBeNull();
 		expect(titleElement.innerHTML).toEqual('test title');
 	});
 	test('display description', () => {
 		const { getByTestId } = renderComponent();
 		let descStr = getByTestId('description');
 		expect(descStr).toBeDefined();
-		expect(descStr).not.toBeNull();
 		expect(descStr.innerHTML).toEqual('test description');
 	});
 	test('duration in correct format', () => {
@@ -46,7 +44,6 @@ describe('<CourseCard/> component tests', () => {
 		const { getByTestId } = renderComponent();
 		let authorStr = getByTestId('author');
 		expect(authorStr).toBeDefined();
-		expect(authorStr).not.toBeNull();
 		expect(authorStr.innerHTML).toEqual(
 			'Authors: ' + getAuthors(mockedData.authors, mockedState.author)
 		);
@@ -56,7 +53,6 @@ describe('<CourseCard/> component tests', () => {
 		const { getByTestId } = renderComponent();
 		let dateStr = getByTestId('dateCreated');
 		expect(dateStr).toBeDefined();
-		expect(dateStr).not.toBeNull();
 		expect(dateStr.innerHTML).toEqual(
 			'Created: ' + formatDate(mockedData.creationDate)
 		);

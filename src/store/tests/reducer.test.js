@@ -1,6 +1,7 @@
-import { mockedState } from '../../../mockedContantsForTest';
-import { addNewCourseAction } from '../actions';
-import { courseReducer } from '../reducer';
+import { mockedState } from '../../mockedContantsForTest';
+import { addNewCourseAction } from '../courses/actions';
+import { courseReducer } from '../courses/reducer';
+
 const mockedData = {
 	title: 'Ttitle',
 	description: 'Tdescription',
